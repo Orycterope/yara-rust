@@ -11,6 +11,7 @@ env:
     - YARA_VERSION=3.9.0
     - YARA_VERSION=3.10.0
     - YARA_VERSION=3.11.0
+    - YARA_VERSION=4.0.2
     - YARA_FEATURES=vendored,bindgen
     - YARA_FEATURES=vendored,bundled-3_11
 before_install:
