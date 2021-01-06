@@ -67,7 +67,7 @@ pub fn rules_scan_mem<'a>(
         yara_sys::yr_rules_scan_mem(
             rules,
             mem.as_ptr(),
-            mem.len(),
+            mem.len() as u64,
             flags,
             Some(scan_callback),
             &mut results as *mut Vec<_> as *mut c_void,
