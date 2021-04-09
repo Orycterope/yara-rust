@@ -127,7 +127,7 @@ impl<'rules> Scanner<'rules> {
         internals::scanner_scan_mem(self.inner, mem)
     }
 
-    /// Scan a file.
+    /// Open a file, and scan it.
     ///
     /// Return a `Vec` of matching rules.
     ///
@@ -135,10 +135,31 @@ impl<'rules> Scanner<'rules> {
     ///
     /// This function takes the Scanner as `&mut` because it modifies the
     /// `scanner->callback` and `scanner->user_data`, which are not behind a Mutex.
-    pub fn scan_file<'r, P: AsRef<Path>>(&self, path: P) -> Result<Vec<Rule<'r>>, Error> {
+    pub fn scan_path<'r, P: AsRef<Path>>(
+        &self,
+        path: P,
+    ) -> Result<Vec<Rule<'r>>, Error> {
         File::open(path)
             .map_err(|e| IoError::new(e, IoErrorKind::OpenScanFile).into())
             .and_then(|file| internals::scanner_scan_file(self.inner, &file).map_err(|e| e.into()))
+    }
+
+    /// Scan a file.
+    ///
+    /// Return a `Vec` of matching rules.
+    ///
+    /// The file must be opened for reading.
+    ///
+    /// # Ownership
+    ///
+    /// This function takes the Scanner as `&mut` because it modifies the
+    /// `scanner->callback` and `scanner->user_data`, which are not behind a Mutex.
+    pub fn scan_file<'r>(
+        &self,
+        file: &File,
+    ) -> Result<Vec<Rule<'r>>, Error> {
+        internals::scanner_scan_file(self.inner, file)
+            .map_err(|e| e.into())
     }
 
     /// Attach a process, pause it, and scan its memory.

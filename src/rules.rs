@@ -105,10 +105,10 @@ impl Rules {
         internals::rules_scan_mem(self.inner, mem, i32::from(timeout), self.flags as i32)
     }
 
-    /// Scan a file.
+    /// Open a file and scan it.
     ///
     /// Return a `Vec` of matching rules.
-    pub fn scan_file<'r, P: AsRef<Path>>(
+    pub fn scan_path<'r, P: AsRef<Path>>(
         &self,
         path: P,
         timeout: u16,
@@ -119,6 +119,20 @@ impl Rules {
                 internals::rules_scan_file(self.inner, &file, i32::from(timeout), self.flags as i32)
                     .map_err(|e| e.into())
             })
+    }
+
+    /// Open a file and scan it.
+    ///
+    /// Return a `Vec` of matching rules.
+    ///
+    /// The file must be opened for reading.
+    pub fn scan_file<'r>(
+        &self,
+        file: &File,
+        timeout: u16,
+    ) -> Result<Vec<Rule<'r>>, Error> {
+            internals::rules_scan_file(self.inner, file, i32::from(timeout), self.flags as i32)
+                .map_err(|e| e.into())
     }
 
     /// Attach a process, pause it, and scan its memory.
