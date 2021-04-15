@@ -18,7 +18,7 @@ bundled-3_11 = []
 vendored = ["yara-src"]
 
 [build-dependencies]
-bindgen = { version = "0.52", optional = true }
+bindgen = { version = "0.58", optional = true }
 yara-src = { version = "0.1.2", optional = true }
 
 [package.metadata.docs.rs]
